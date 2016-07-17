@@ -11,7 +11,8 @@ export class SGameView {
 		this.foodColor = '#2a97ca';
 	}
 
-	drawGrid(cs, cw, ch, context) {
+	drawGrid(cs, cw, ch) {
+		const { context } = this;
 
 		context.strokeStyle = '#b3b3b3';
 
@@ -28,6 +29,24 @@ export class SGameView {
       context.lineTo(cw, i);
       context.stroke();
 		}
+	}
+
+	drawLevel(cs) {
+		const { context, field } = this;
+
+		field.level.forEach((row, rowIndex) => {
+			row.forEach((cell, cellIndex) => {
+				if (cell === '-' || cell === '+' || cell === '|') {
+					context.fillStyle = '#777777';
+			    context.fillRect(
+			      cellIndex * cs,
+			      rowIndex * cs,
+			      cs,
+			      cs
+			    );
+				}
+			});
+		});
 	}
 
 	setupKeysForSnake1(event, snake) {
@@ -98,7 +117,7 @@ export class SGameView {
 		window.addEventListener('keydown', event => {
 			const { snakes } = this;
 
-			if (snakes.length = 2) {
+			if (snakes.length === 2) {
 				this.setupKeysForSnake2(event, snakes[1]);
 			}
 
@@ -162,7 +181,8 @@ export class SGameView {
 	    );   	
     });
 
-		this.drawGrid(cs, cw, ch, context);
+    this.drawLevel(cs);
+		this.drawGrid(cs, cw, ch);
 
 		snakes.forEach(snake => {
 			// game over

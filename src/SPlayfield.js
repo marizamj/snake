@@ -1,13 +1,29 @@
 import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
 
 export class SPlayfield {
-	constructor(snakes) {
+	constructor(...snakes) {
 		this.foods = [];
-		this.snakes = Array.from(arguments);
+		this.snakes = snakes;
+
+		this.level = [];
+		this.obstacles = [];
 
 		this.snakes.forEach(snake => {
 			snake.field = this;
 		});
+	}
+
+	loadLevel(level) {
+		this.level = level.split('\n').map(row => row.split(''));
+
+		this.level.forEach((row, rowIndex) => {
+			row.forEach((cell, cellIndex) => {
+				if (cell === '-' || cell === '+' || cell === '|') {
+					this.obstacles.push({ 'x': cellIndex * cs, 'y': rowIndex * cs });
+				}
+			});
+		});
+		// console.log(this.obstacles);
 	}
 
 	createFood() {

@@ -32,26 +32,26 @@ export class Snake {
 
 		if (direction === 'up') {
 			headPosition.y > 0 ?
-				headPosition.y -= 20 :
-				headPosition.y = ch - 20;
+				headPosition.y -= cs :
+				headPosition.y = ch - cs;
 		}
 
 		if (direction === 'right') {
-			headPosition.x < cw - 20 ?
-				headPosition.x += 20:
+			headPosition.x < cw - cs ?
+				headPosition.x += cs:
 				headPosition.x = 0;
 		}
 
 		if (direction === 'down') {	
-			headPosition.y < ch - 20 ?
-				headPosition.y += 20 :
+			headPosition.y < ch - cs ?
+				headPosition.y += cs :
 				headPosition.y = 0;
 		}
 
 		if (direction === 'left') {
 			headPosition.x > 0 ?
-				headPosition.x -= 20:
-				headPosition.x = cw - 20;
+				headPosition.x -= cs:
+				headPosition.x = cw - cs;
 		}
 
 		this.checkFood(headPosition);
@@ -70,7 +70,6 @@ export class Snake {
 
 	eatFood(coord) {
 		this.snakeLength += 2;
-		this.speed -= 3;
 
 		this.field.foods = this.field.foods.filter(food => !eq(food, coord));
 
@@ -89,8 +88,13 @@ export class Snake {
 		const didHitAnyTail = this.field.snakes.some(snake => {
 			return snake.isTail(coord);
 		});
-		return didHitAnyTail;
+
+		const didHitWall = this.field.obstacles.some(obstacle => eq(coord, obstacle)); 
+
+		return didHitAnyTail || didHitWall;
 	}
 
 	reset() { this.setInitial(); }
 }
+
+
