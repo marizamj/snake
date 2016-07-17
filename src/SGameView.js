@@ -1,6 +1,7 @@
 import { Snake } from './Snake';
 import { SPlayfield } from './SPlayfield';
 import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
+import { forEachCell } from './coord-helpers';
 
 export class SGameView {
 	constructor(field, canvas) {
@@ -34,18 +35,14 @@ export class SGameView {
 	drawLevel(cs) {
 		const { context, field } = this;
 
-		field.level.forEach((row, rowIndex) => {
-			row.forEach((cell, cellIndex) => {
-				if (cell === '-' || cell === '+' || cell === '|') {
-					context.fillStyle = '#777777';
-			    context.fillRect(
-			      cellIndex * cs,
-			      rowIndex * cs,
-			      cs,
-			      cs
-			    );
-				}
-			});
+		field.obstacles.forEach(obstacle => {
+			context.fillStyle = '#777777';
+	    context.fillRect(
+	      obstacle.x,
+	      obstacle.y,
+	      cs,
+	      cs
+	    );
 		});
 	}
 
@@ -55,7 +52,7 @@ export class SGameView {
 			if (snake.direction !== 'down') {
 				snake.direction = 'up';
 			}
-			
+
 		}
 
 		if (event.key === 'ArrowRight') {
@@ -86,7 +83,7 @@ export class SGameView {
 			if (snake.direction !== 'down') {
 				snake.direction = 'up';
 			}
-			
+
 		}
 
 		if (event.key === 'd') {
@@ -178,7 +175,7 @@ export class SGameView {
 	      snake.headPosition.y,
 	      cs,
 	      cs
-	    );   	
+	    );
     });
 
     this.drawLevel(cs);

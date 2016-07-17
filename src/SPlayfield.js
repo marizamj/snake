@@ -1,11 +1,10 @@
 import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
+import { forEachCell } from './coord-helpers';
 
 export class SPlayfield {
 	constructor(...snakes) {
 		this.foods = [];
 		this.snakes = snakes;
-
-		this.level = [];
 		this.obstacles = [];
 
 		this.snakes.forEach(snake => {
@@ -14,16 +13,13 @@ export class SPlayfield {
 	}
 
 	loadLevel(level) {
-		this.level = level.split('\n').map(row => row.split(''));
+		const splittedLevel = level.split('\n').map(row => row.split(''));
 
-		this.level.forEach((row, rowIndex) => {
-			row.forEach((cell, cellIndex) => {
-				if (cell === '-' || cell === '+' || cell === '|') {
-					this.obstacles.push({ 'x': cellIndex * cs, 'y': rowIndex * cs });
-				}
-			});
+		forEachCell(splittedLevel, (cell, cellIndex, rowIndex) => {
+			if (cell === '-' || cell === '+' || cell === '|') {
+				this.obstacles.push({ 'x': cellIndex * cs, 'y': rowIndex * cs });
+			}
 		});
-		// console.log(this.obstacles);
 	}
 
 	createFood() {
