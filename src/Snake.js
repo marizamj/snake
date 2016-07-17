@@ -55,7 +55,7 @@ export class Snake {
 
 		this.checkFood(headPosition);
 
-		if (this.isTail(headPosition)) {
+		if (this.isObstacle(headPosition)) {
 			this.status = 'game-over';
 		}
 	}
@@ -87,7 +87,12 @@ export class Snake {
 		}
 	}
 
-	
+	isObstacle(coord) {
+		const didHitAnyTail = this.field.snakes.some(snake => {
+			return snake.isTail(coord);
+		});
+		return didHitAnyTail;
+	}
 
 	reset() { this.setInitial(); }
 }
