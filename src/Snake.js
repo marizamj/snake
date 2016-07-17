@@ -1,4 +1,5 @@
 import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
+import { eq } from './coord-helpers';
 
 export class Snake {
 	setInitial(initialX, initialY, direction, color) {
@@ -61,7 +62,7 @@ export class Snake {
 	}
 
 	checkFood(coord) {
-		const isFood = this.field.foods.find(food => food.x === coord.x && food.y === coord.y);
+		const isFood = this.field.foods.find(food => eq(food, coord));
 		if (isFood) {
 			this.eatFood(coord);
 		}
@@ -71,7 +72,7 @@ export class Snake {
 		this.snakeLength += 2;
 		this.speed -= 3;
 
-		this.field.foods = this.field.foods.filter(food => food.x !== coord.x && food.y !== coord.y );
+		this.field.foods = this.field.foods.filter(food => !eq(food, coord));
 
 		this.field.createFood();
 
@@ -81,10 +82,7 @@ export class Snake {
 	}
 
 	isTail(coord) {
-		const is = this.tail.find(part => part.x === coord.x && part.y === coord.y );
-		if (is) {
-			return true;
-		}
+		return Boolean(this.tail.find(part => eq(part, coord)));
 	}
 
 	isObstacle(coord) {

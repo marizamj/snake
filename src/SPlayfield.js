@@ -18,13 +18,7 @@ export class SPlayfield {
 			y: randomY - (randomY % cs),
 		}
 
-		let isTail = false;
-
-		this.snakes.forEach(snake => {
-			if (snake.isTail(newFoodCoord)) {
-				isTail = true;
-			}
-		})
+		const isTail = this.snakes.some(snake => snake.isTail(newFoodCoord));
 
 		if (!isTail) {
 			this.foods.push(newFoodCoord);
