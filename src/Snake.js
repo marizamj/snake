@@ -2,7 +2,8 @@ import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
 import { eq } from './coord-helpers';
 
 export class Snake {
-	setInitial(initialX, initialY, direction, color) {
+	setInitial(name, initialX, initialY, direction, color, speed) {
+		this.name = name;
 		this.snakeLength = 5;
 		this.headPosition = {
 			'x': initialX,
@@ -10,54 +11,67 @@ export class Snake {
 		}
 		this.tail = [];
 		this.direction = direction;
-		this.speed = 200;
+		this.speed = speed;
 		this.status = 'in-game';
 		this.color = color;
 		this.field = undefined;
+		this.t = 0;
 	}
 
-	constructor(initialX, initialY, direction, color) {
-		this.setInitial(initialX, initialY, direction, color);
+	constructor(name, initialX, initialY, direction, color, speed = 200) {
+		this.setInitial(name, initialX, initialY, direction, color, speed);
 	}
 
-	move() {
-		const headPosition = this.headPosition;
-		const direction = this.direction;
-
-		this.tail.unshift({ ...headPosition });
-
-		if (this.tail.length >= this.snakeLength) {
-			this.tail = this.tail.slice(0, this.snakeLength);
-		}
+	getNewHeadPosition(direction) {
+		const { headPosition } = this;
+		const newHeadPosition = { ...headPosition };
 
 		if (direction === 'up') {
 			headPosition.y > 0 ?
-				headPosition.y -= cs :
-				headPosition.y = ch - cs;
+				newHeadPosition.y -= cs :
+				newHeadPosition.y = ch - cs;
 		}
 
 		if (direction === 'right') {
 			headPosition.x < cw - cs ?
-				headPosition.x += cs:
-				headPosition.x = 0;
+				newHeadPosition.x += cs:
+				newHeadPosition.x = 0;
 		}
 
-		if (direction === 'down') {	
+		if (direction === 'down') {
 			headPosition.y < ch - cs ?
-				headPosition.y += cs :
-				headPosition.y = 0;
+				newHeadPosition.y += cs :
+				newHeadPosition.y = 0;
 		}
 
 		if (direction === 'left') {
 			headPosition.x > 0 ?
-				headPosition.x -= cs:
-				headPosition.x = cw - cs;
+				newHeadPosition.x -= cs:
+				newHeadPosition.x = cw - cs;
 		}
 
-		this.checkFood(headPosition);
+		return newHeadPosition;
+	}
 
-		if (this.isObstacle(headPosition)) {
+	move() {
+		const { headPosition, direction } = this;
+		const newHeadPosition = this.getNewHeadPosition(direction);
+
+		this.checkFood(newHeadPosition);
+
+		if (this.isObstacle(newHeadPosition)) {
 			this.status = 'game-over';
+			clearInterval(this.interval);
+
+		} else {
+			this.tail.unshift({ ...headPosition });
+
+			headPosition.x = newHeadPosition.x;
+			headPosition.y = newHeadPosition.y;
+
+			if (this.tail.length >= this.snakeLength) {
+				this.tail = this.tail.slice(0, this.snakeLength);
+			}
 		}
 	}
 
@@ -84,14 +98,22 @@ export class Snake {
 		return Boolean(this.tail.find(part => eq(part, coord)));
 	}
 
+	isHead(coord) {
+		return eq(this.headPosition, coord);
+	}
+
 	isObstacle(coord) {
-		const didHitAnyTail = this.field.snakes.some(snake => {
-			return snake.isTail(coord);
+		const didHitAnySnake = this.field.snakes.some(snake => {
+			if (snake.name !== this.name) {
+				return snake.isTail(coord) || snake.isHead(coord);
+			} else {
+				return snake.isTail(coord);
+			}
 		});
 
-		const didHitWall = this.field.obstacles.some(obstacle => eq(coord, obstacle)); 
+		const didHitWall = this.field.obstacles.some(obstacle => eq(coord, obstacle));
 
-		return didHitAnyTail || didHitWall;
+		return didHitAnySnake || didHitWall;
 	}
 
 	reset() { this.setInitial(); }

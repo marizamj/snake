@@ -1,5 +1,5 @@
 import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
-import { forEachCell } from './coord-helpers';
+import { eq, forEachCell } from './coord-helpers';
 
 export class SPlayfield {
 	constructor(...snakes) {
@@ -31,8 +31,9 @@ export class SPlayfield {
 		}
 
 		const isTail = this.snakes.some(snake => snake.isTail(newFoodCoord));
+		const isObstacle = this.obstacles.some(obstacle => eq(newFoodCoord, obstacle));
 
-		if (!isTail) {
+		if (!isTail && !isObstacle) {
 			this.foods.push(newFoodCoord);
 		} else {
 			this.createFood();

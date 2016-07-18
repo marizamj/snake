@@ -9,7 +9,8 @@ export class SGameView {
 		this.snakes = field.snakes;
 		this.canvas = canvas;
 		this.context = canvas.getContext('2d');
-		this.foodColor = '#2a97ca';
+		this.foodColor = '#54b78c';
+		this.t = 0;
 	}
 
 	drawGrid(cs, cw, ch) {
@@ -181,21 +182,15 @@ export class SGameView {
     this.drawLevel(cs);
 		this.drawGrid(cs, cw, ch);
 
-		snakes.forEach(snake => {
-			// game over
-	    if (snake.status === 'game-over') {
+		const isGameOver = snakes.every(snake => snake.status === 'game-over');
 
-	    	context.font = '32px serif';
-		    context.textAlign = 'center';
-		    context.fillStyle = 'black';
-		    context.fillText('Game over!', cw / 2, ch / 4);
-		    context.fillText('Click anywhere to start new game.', cw / 2, ch / 3);
-
-		    snakes.forEach(snake => {
-		    	clearInterval(snake.interval);
-		    });
-	    }
-		});
+		if (isGameOver) {
+    	context.font = '32px serif';
+	    context.textAlign = 'center';
+	    context.fillStyle = 'black';
+	    context.fillText('Game over!', cw / 2, ch / 4);
+	    context.fillText('Click anywhere to start new game.', cw / 2, ch / 3);
+		}
 	}
 
 	play() {
@@ -203,12 +198,20 @@ export class SGameView {
 		this.field.createFood();
 		this.renderGame();
 
-		this.snakes.forEach(snake => {
-			snake.interval = setInterval(() => {
-				snake.move();
-				this.renderGame();
-			}, snake.speed);
-		});
+		const loop = (t) => {
+			this.snakes.forEach(snake => {
+				if (t - snake.t > (1 / snake.speed) * 5000) {
+					snake.move();
+					snake.t = t;
+				}
+			});
+
+			this.renderGame();
+
+			window.requestAnimationFrame(loop);
+		};
+
+		loop(0);
 	}
 }
 

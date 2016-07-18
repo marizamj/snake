@@ -3,8 +3,8 @@ import { SPlayfield } from './SPlayfield';
 import { SGameView } from './SGameView';
 import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
 
-const snake1 = new Snake(40, 40, 'right', '#cf4f4f');
-const snake2 = new Snake(740, 440, 'left', '#3FA4A5');
+const snake1 = new Snake('player1', 740, 440, 'left', '#0272a2', 20);
+const snake2 = new Snake('player2', 40, 40, 'right', '#ca0b03', 40);
 const field = new SPlayfield(snake1, snake2);
 const view = new SGameView(field, document.querySelector('#canvas'));
 
