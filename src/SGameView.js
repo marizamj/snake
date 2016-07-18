@@ -47,61 +47,29 @@ export class SGameView {
 		});
 	}
 
-	setupKeysForSnake1(event, snake) {
-		if (event.key === 'ArrowUp') {
+	setupKeys(event, snake, keys) {
+		if (event.key === keys.up) {
 			event.preventDefault();
 			if (snake.direction !== 'down') {
 				snake.direction = 'up';
 			}
-
 		}
 
-		if (event.key === 'ArrowRight') {
+		if (event.key === keys.right) {
 			event.preventDefault();
 			if (snake.direction !== 'left') {
 				snake.direction = 'right';
 			}
 		}
 
-		if (event.key === 'ArrowDown') {
+		if (event.key === keys.down) {
 			event.preventDefault();
 			if (snake.direction !== 'up') {
 				snake.direction = 'down';
 			}
 		}
 
-		if (event.key === 'ArrowLeft') {
-			event.preventDefault();
-			if (snake.direction !== 'right') {
-				snake.direction = 'left';
-			}
-		}
-	}
-
-	setupKeysForSnake2(event, snake) {
-		if (event.key === 'w') {
-			event.preventDefault();
-			if (snake.direction !== 'down') {
-				snake.direction = 'up';
-			}
-
-		}
-
-		if (event.key === 'd') {
-			event.preventDefault();
-			if (snake.direction !== 'left') {
-				snake.direction = 'right';
-			}
-		}
-
-		if (event.key === 's') {
-			event.preventDefault();
-			if (snake.direction !== 'up') {
-				snake.direction = 'down';
-			}
-		}
-
-		if (event.key === 'a') {
+		if (event.key === keys.left) {
 			event.preventDefault();
 			if (snake.direction !== 'right') {
 				snake.direction = 'left';
@@ -116,11 +84,20 @@ export class SGameView {
 			const { snakes } = this;
 
 			if (snakes.length === 2) {
-				this.setupKeysForSnake2(event, snakes[1]);
+				this.setupKeys(event, snakes[1], {
+					up: 'ArrowUp',
+					right: 'ArrowRight',
+					down: 'ArrowDown',
+					left: 'ArrowLeft'
+				});
 			}
 
-			this.setupKeysForSnake1(event, snakes[0]);
-
+			this.setupKeys(event, snakes[0], {
+				up: 'w',
+				right: 'd',
+				down: 's',
+				left: 'a'
+			});
 		});
 
 		// canvas.addEventListener('click', event => {
