@@ -16,6 +16,8 @@ export class Snake {
 		this.color = color;
 		this.field = undefined;
 		this.t = 0;
+
+		this.directionQueue = [];
 	}
 
 	constructor(name, initialX, initialY, direction, color, speed = 200) {
@@ -53,9 +55,39 @@ export class Snake {
 		return newHeadPosition;
 	}
 
+	setDirection() {
+		if (this.directionQueue.length === 0) {
+			return;
+		}
+
+		const d = this.directionQueue.shift();
+
+		if (this.isNextDirectionAvaliable(this.direction, d)) {
+			this.direction = d;
+		} else {
+			this.setDirection();
+		}
+	}
+
+	isNextDirectionAvaliable(direction, nextDirection) {
+		const isOpposite = (dir1, dir2) => {
+			const axis = [
+				['left', 'right'],
+				['up', 'down']
+			].find(direction => direction.includes(dir1));
+
+			return dir1 !== dir2 && axis.includes(dir2);
+		};
+
+		return !isOpposite(direction, nextDirection);
+	}
+
 	move() {
-		const { headPosition, direction } = this;
-		const newHeadPosition = this.getNewHeadPosition(direction);
+		const { headPosition } = this;
+
+		this.setDirection();
+
+		const newHeadPosition = this.getNewHeadPosition(this.direction);
 
 		this.checkFood(newHeadPosition);
 

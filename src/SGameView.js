@@ -50,30 +50,22 @@ export class SGameView {
 	setupKeys(event, snake, keys) {
 		if (event.key === keys.up) {
 			event.preventDefault();
-			if (snake.direction !== 'down') {
-				snake.direction = 'up';
-			}
+			snake.directionQueue.push('up');
 		}
 
 		if (event.key === keys.right) {
 			event.preventDefault();
-			if (snake.direction !== 'left') {
-				snake.direction = 'right';
-			}
+			snake.directionQueue.push('right');
 		}
 
 		if (event.key === keys.down) {
 			event.preventDefault();
-			if (snake.direction !== 'up') {
-				snake.direction = 'down';
-			}
+			snake.directionQueue.push('down');
 		}
 
 		if (event.key === keys.left) {
 			event.preventDefault();
-			if (snake.direction !== 'right') {
-				snake.direction = 'left';
-			}
+			snake.directionQueue.push('left');
 		}
 	}
 
@@ -176,6 +168,8 @@ export class SGameView {
 		this.renderGame();
 
 		const loop = (t) => {
+			this.renderGame();
+
 			this.snakes.forEach(snake => {
 				if (t - snake.t > (1 / snake.speed) * 5000) {
 					if (snake.status === "game-over") {
@@ -185,8 +179,6 @@ export class SGameView {
 					snake.t = t;
 				}
 			});
-
-			this.renderGame();
 
 			window.requestAnimationFrame(loop);
 		};
