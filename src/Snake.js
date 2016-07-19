@@ -61,8 +61,6 @@ export class Snake {
 
 		if (this.isObstacle(newHeadPosition)) {
 			this.status = 'game-over';
-			clearInterval(this.interval);
-
 		} else {
 			this.tail.unshift({ ...headPosition });
 
@@ -84,6 +82,7 @@ export class Snake {
 
 	eatFood(coord) {
 		this.snakeLength += 2;
+		this.speed += 1;
 
 		this.field.foods = this.field.foods.filter(food => !eq(food, coord));
 

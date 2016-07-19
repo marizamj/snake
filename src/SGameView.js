@@ -112,7 +112,6 @@ export class SGameView {
 		const { context, snakes, field } = this;
 		// const game = this.game;
 
-
 		context.clearRect(0, 0, cw, ch);
 
     // draw foods
@@ -128,6 +127,7 @@ export class SGameView {
     	}
     }
 
+    //draw snakes
     snakes.forEach(snake => {
 	    // draw tail
 			const tail = snake.tail;
@@ -178,6 +178,9 @@ export class SGameView {
 		const loop = (t) => {
 			this.snakes.forEach(snake => {
 				if (t - snake.t > (1 / snake.speed) * 5000) {
+					if (snake.status === "game-over") {
+						return;
+					}
 					snake.move();
 					snake.t = t;
 				}
