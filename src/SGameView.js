@@ -79,6 +79,12 @@ export class SGameView {
 		window.addEventListener('keydown', event => {
 			this.snakes.forEach(snake => this.handleKeys(event, snake));
 		});
+
+		this.canvas.addEventListener('click', event => {
+			if (this.field.isGameOver()) {
+				this.field.reset();
+			}
+		});
 	}
 
 	renderGame() {
@@ -131,9 +137,7 @@ export class SGameView {
     this.drawLevel(cs);
 		this.drawGrid(cs, cw, ch);
 
-		const isGameOver = snakes.every(snake => snake.status === 'game-over');
-
-		if (isGameOver) {
+		if (this.field.isGameOver()) {
 			context.fillStyle = 'rgba(150, 150, 150, 0.5)';
 			context.fillRect(0, 0, cw, ch);
     	context.font = '32px serif';

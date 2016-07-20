@@ -8,12 +8,15 @@ export class SPlayfield {
 		this.obstacles = [];
 	}
 
+	isGameOver() {
+		return this.snakes.every(snake => snake.status === 'game-over');
+	}
+
 	setSnakes(...snakes) {
 		this.snakes.length = 0;
 
 		snakes.forEach(snake => {
 			this.snakes.push(snake);
-
 
 			snake.reset();
 			snake.field = this;
@@ -50,5 +53,12 @@ export class SPlayfield {
 
 	getSnakeByName(snakeName) {
 		return this.snakes.find(snake => snake.name === snakeName);
+	}
+
+	reset() {
+		this.snakes.forEach(snake => {
+			snake.reset();
+			snake.field = this;
+		});
 	}
 }
