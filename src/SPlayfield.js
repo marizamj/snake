@@ -2,12 +2,20 @@ import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
 import { eq, forEachCell } from './coord-helpers';
 
 export class SPlayfield {
-	constructor(...snakes) {
+	constructor() {
 		this.foods = [];
-		this.snakes = snakes;
+		this.snakes = [];
 		this.obstacles = [];
+	}
 
-		this.snakes.forEach(snake => {
+	setSnakes(...snakes) {
+		this.snakes.length = 0;
+
+		snakes.forEach(snake => {
+			this.snakes.push(snake);
+
+
+			snake.reset();
 			snake.field = this;
 		});
 	}

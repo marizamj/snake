@@ -8,15 +8,46 @@
 			margin: 0;
 			background: #818181;
 			font-size: 1.5rem;
+			min-width: 1240px;
 		}
 
 		.header {
 			height: 75px;
 			width: 100%;
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		.select {
+			font-size: 1rem;
+			margin-top: 25px;
+			cursor: pointer;
 		}
 
 		.wrapper {
+			display: flex;
+		  flex: 1;
+		}
+
+		.column {
 			text-align: center;
+		}
+
+		.center {
+			flex: 1;
+		}
+
+		.left, .right {
+			flex: 0 0 200px;
+		}
+
+		.left {
+			padding-left: 20px;
+			order: -1;
+		}
+
+		.right {
+			padding-right: 20px;
 		}
 
 		#canvas {
@@ -27,10 +58,25 @@
 </head>
 <body>
 <header class="header">
-
+	<select class="select">
+		<option value="single-player">Single player</option>
+		<option value="two-players">Two players</option>
+	</select>
 </header>
 
-<div class="wrapper"><canvas id="canvas" width="800" height="500"></canvas></div>
+<div class="wrapper">
+	<div class="left column">
+		<h3>Player 1</h3>
+	</div>
+
+	<div class="center column">
+		<canvas id="canvas" width="800" height="500"></canvas>
+	</div>
+
+	<div class="right column">
+		<h3>Player 2</h3>
+	</div>
+</div>
 
 <script type="text/javascript" src="dist/bundle.js"></script>
 

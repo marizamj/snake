@@ -23,7 +23,10 @@ export class Snake {
 	}
 
 	constructor(name, initialX, initialY, direction, color, speed = 200) {
-		this.setInitial(name, initialX, initialY, direction, color, speed);
+		this.reset = () =>
+			this.setInitial(name, initialX, initialY, direction, color, speed);
+
+		this.reset();
 	}
 
 	getNewHeadPosition(direction) {
@@ -61,7 +64,6 @@ export class Snake {
 		if (this.directionQueue.length === 0) {
 			return;
 		}
-		// console.log(this.directionQueue);
 
 		const d = this.directionQueue.shift();
 
@@ -112,7 +114,6 @@ export class Snake {
 			this.health -= 1;
 			this.status = 'paused';
 			this.directionQueue = [];
-			console.log(this.health);
 
 			if (this.health <= 0) {
 				this.status = 'game-over';
