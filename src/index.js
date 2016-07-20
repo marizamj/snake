@@ -16,9 +16,11 @@ const view = new SGameView(field, document.querySelector('#canvas'));
 window.field = field;
 
 const ui = new UI(field);
+const selectNode = document.querySelector('select');
 
 const setMode = (modeName) => {
 	const updateUI = () => ui.update();
+	location.hash = modeName;
 
 	if (modeName === 'single-player') {
 		field.setSnakes(snake1);
@@ -36,18 +38,23 @@ const setMode = (modeName) => {
 		snake2.on('update', updateUI);
 	}
 
+	selectNode.value = modeName;
 	updateUI();
 };
 
 fetch('/level1.txt').then(file => file.text()).then(level => {
 
-	document.querySelector('select').addEventListener('change', event => {
+	selectNode.addEventListener('change', event => {
 		const value = event.target.value;
 
 		setMode(value);
 	});
 
-	setMode('single-player');
+	if (location.hash === '#two-players') {
+		setMode('two-players');
+	} else {
+		setMode('single-player');
+	}
 
 	field.loadLevel(level);
 
