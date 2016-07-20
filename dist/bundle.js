@@ -948,7 +948,7 @@ var setMode = function setMode(modeName) {
 	updateUI();
 };
 
-fetch('/level3.txt').then(function (file) {
+fetch('level3.txt').then(function (file) {
 	return file.text();
 }).then(function (level) {
 
