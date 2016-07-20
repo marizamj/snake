@@ -42,7 +42,7 @@ const setMode = (modeName) => {
 	updateUI();
 };
 
-fetch('/level3.txt').then(file => file.text()).then(level => {
+fetch('level3.txt').then(file => file.text()).then(level => {
 
 	selectNode.addEventListener('change', event => {
 		const value = event.target.value;
