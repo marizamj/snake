@@ -47,7 +47,9 @@ export class SGameView {
 		});
 	}
 
-	setupKeys(event, snake, keys) {
+	handleKeys(event, snake) {
+		const keys = snake.controls;
+
 		if (event.key === keys.up) {
 			event.preventDefault();
 			snake.directionQueue.push('up');
@@ -74,32 +76,13 @@ export class SGameView {
 	}
 
 	setupEvents() {
-		const { canvas }  = this;
-
 		window.addEventListener('keydown', event => {
-			const { snakes } = this;
-
-			if (snakes.length === 2) {
-				this.setupKeys(event, snakes[1], {
-					up: 'ArrowUp',
-					right: 'ArrowRight',
-					down: 'ArrowDown',
-					left: 'ArrowLeft'
-				});
-			}
-
-			this.setupKeys(event, snakes[0], {
-				up: 'w',
-				right: 'd',
-				down: 's',
-				left: 'a'
-			});
+			this.snakes.forEach(snake => this.handleKeys(event, snake));
 		});
 	}
 
 	renderGame() {
 		const { context, snakes, field } = this;
-		// const game = this.game;
 
 		context.clearRect(0, 0, cw, ch);
 

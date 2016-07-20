@@ -47,4 +47,8 @@ export class SPlayfield {
 			this.createFood();
 		}
 	}
+
+	getSnakeByName(snakeName) {
+		return this.snakes.find(snake => snake.name === snakeName);
+	}
 }

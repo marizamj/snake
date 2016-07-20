@@ -54,6 +54,10 @@
 			border: 1px solid #b3b3b3;
 			background: radial-gradient(#e8e8e8, #b3b3b3);
 		}
+
+		.player-view--hidden {
+			visibility: hidden;
+		}
 	</style>
 </head>
 <body>
@@ -65,16 +69,22 @@
 </header>
 
 <div class="wrapper">
-	<div class="left column">
+	<div class="left column js-player-view" data-player="player1">
 		<h3>Player 1</h3>
+
+		<div class="controls">
+		</div>
 	</div>
 
 	<div class="center column">
 		<canvas id="canvas" width="800" height="500"></canvas>
 	</div>
 
-	<div class="right column">
+	<div class="right column js-player-view" data-player="player2">
 		<h3>Player 2</h3>
+
+		<div class="controls">
+		</div>
 	</div>
 </div>
 

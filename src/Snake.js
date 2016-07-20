@@ -1,7 +1,9 @@
 import { cs, cw, ch } from './sizes'; // cell size, canvas width, canvas height
 import { eq } from './coord-helpers';
 
-export class Snake {
+const EventEmitter = require('events');
+
+export class Snake extends EventEmitter {
 	setInitial(name, initialX, initialY, direction, color, speed) {
 		this.name = name;
 		this.snakeLength = 5;
@@ -18,11 +20,17 @@ export class Snake {
 		this.t = 0;
 		this.score = 0;
 		this.health = 3;
-
+		this.controls = null;
 		this.directionQueue = [];
 	}
 
+	setControls(controls) {
+		this.controls = controls;
+	}
+
 	constructor(name, initialX, initialY, direction, color, speed = 200) {
+		super();
+
 		this.reset = () =>
 			this.setInitial(name, initialX, initialY, direction, color, speed);
 
@@ -112,6 +120,8 @@ export class Snake {
 
 		if (this.isObstacle(newHeadPosition)) {
 			this.health -= 1;
+			this.emit('update');
+
 			this.status = 'paused';
 			this.directionQueue = [];
 
@@ -139,7 +149,9 @@ export class Snake {
 
 	eatFood(coord) {
 		this.score += Math.floor(this.speed * this.snakeLength / 10);
-		console.log(this.score);
+
+		this.emit('update');
+
 		this.snakeLength += 2;
 		this.speed += 1;
 
