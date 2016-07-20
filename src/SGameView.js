@@ -10,7 +10,7 @@ export class SGameView {
 		this.canvas = canvas;
 		this.context = canvas.getContext('2d');
 		this.foodColor = '#54b78c';
-		this.t = 0;
+		this.status = 'paused';
 	}
 
 	drawGrid(cs, cw, ch) {
@@ -51,21 +51,25 @@ export class SGameView {
 		if (event.key === keys.up) {
 			event.preventDefault();
 			snake.directionQueue.push('up');
+			snake.removePause();
 		}
 
 		if (event.key === keys.right) {
 			event.preventDefault();
 			snake.directionQueue.push('right');
+			snake.removePause();
 		}
 
 		if (event.key === keys.down) {
 			event.preventDefault();
 			snake.directionQueue.push('down');
+			snake.removePause();
 		}
 
 		if (event.key === keys.left) {
 			event.preventDefault();
 			snake.directionQueue.push('left');
+			snake.removePause();
 		}
 	}
 
@@ -91,13 +95,6 @@ export class SGameView {
 				left: 'a'
 			});
 		});
-
-		// canvas.addEventListener('click', event => {
-		// 	if (this.game.status === 'over') {
-		// 		this.game.reset();
-		// 		this.play();
-		// 	}
-		// });
 	}
 
 	renderGame() {
@@ -154,6 +151,8 @@ export class SGameView {
 		const isGameOver = snakes.every(snake => snake.status === 'game-over');
 
 		if (isGameOver) {
+			context.fillStyle = 'rgba(150, 150, 150, 0.5)';
+			context.fillRect(0, 0, cw, ch);
     	context.font = '32px serif';
 	    context.textAlign = 'center';
 	    context.fillStyle = 'black';

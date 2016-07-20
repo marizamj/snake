@@ -12,10 +12,12 @@ export class Snake {
 		this.tail = [];
 		this.direction = direction;
 		this.speed = speed;
-		this.status = 'in-game';
+		this.status = 'paused';
 		this.color = color;
 		this.field = undefined;
 		this.t = 0;
+		this.score = 0;
+		this.health = 3;
 
 		this.directionQueue = [];
 	}
@@ -59,6 +61,7 @@ export class Snake {
 		if (this.directionQueue.length === 0) {
 			return;
 		}
+		// console.log(this.directionQueue);
 
 		const d = this.directionQueue.shift();
 
@@ -82,17 +85,38 @@ export class Snake {
 		return !isOpposite(direction, nextDirection);
 	}
 
+	removePause() {
+		if (this.status === 'paused') {
+			this.status = 'in-game';
+		}
+	}
+
 	move() {
 		const { headPosition } = this;
 
+		if (this.status === 'paused') {
+			return;
+		}
+
 		this.setDirection();
+
+		if (!this.direction) {
+			return;
+		}
 
 		const newHeadPosition = this.getNewHeadPosition(this.direction);
 
 		this.checkFood(newHeadPosition);
 
 		if (this.isObstacle(newHeadPosition)) {
-			this.status = 'game-over';
+			this.health -= 1;
+			this.status = 'paused';
+			this.directionQueue = [];
+			console.log(this.health);
+
+			if (this.health <= 0) {
+				this.status = 'game-over';
+			}
 		} else {
 			this.tail.unshift({ ...headPosition });
 
@@ -113,6 +137,8 @@ export class Snake {
 	}
 
 	eatFood(coord) {
+		this.score += Math.floor(this.speed * this.snakeLength / 10);
+		console.log(this.score);
 		this.snakeLength += 2;
 		this.speed += 1;
 
