@@ -2,7 +2,7 @@
 
 This version of good old Snake provides single- and two-players mode.
 
-PLay here:
+Play here:
 
 http://marizamj.github.io/snake/
 
