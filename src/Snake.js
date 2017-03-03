@@ -19,7 +19,7 @@ export class Snake extends EventEmitter {
 		this.field = undefined;
 		this.t = 0;
 		this.score = 0;
-		this.health = 5;
+		this.health = 1;
 		this.directionQueue = [];
 	}
 
